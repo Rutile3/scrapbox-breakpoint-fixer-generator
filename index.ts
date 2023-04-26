@@ -1,12 +1,11 @@
 import * as fs from "fs/promises";
-import { downloadTextData } from "./download";
+import { downloadAppCssText } from "./downloadAppCss";
 
-const appCssUrl = "https://scrapbox.io/assets/css/app.css";
 const fixerCssFileName = "app-breakpoint-fixer.css";
 
 async function main() {
   try {
-    const appCssText = await downloadTextData(appCssUrl);
+    const appCssText = await downloadAppCssText();
     
     // TODO: app.cssからメディアクエリを抽出
     // @media((and )*\((max|min)-width: \d{3,4}px\))* \{\n(.*\n)+?\}\n\n
