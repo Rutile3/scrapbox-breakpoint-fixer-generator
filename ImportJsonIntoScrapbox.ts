@@ -38,12 +38,12 @@ export class ImportJsonPage {
     indent: number = 0
   ) {
     const lines: string[] = [];
-    const indentSpace = " ".repeat(indent);
+    const indentSpace = ' '.repeat(indent);
 
     // インデントを考慮してコードブロックを作成
     lines.push(indentSpace + `code:${fileName}`);
-    code.split("\n").forEach((line) => {
-      lines.push(indentSpace + " " + line);
+    code.split('\n').forEach((line) => {
+      lines.push(indentSpace + ' ' + line);
     });
 
     return lines;
