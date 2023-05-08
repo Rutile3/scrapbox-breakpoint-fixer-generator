@@ -5,24 +5,8 @@ import { ErrorConsoleLog, SuccessConsoleLog } from "./consoleLog";
 import { downloadAppCssText } from "./downloadAppCss";
 
 /**  */
+const scrapboxPageTitle = "app-breakpoint-fixer";
 const fixerCssName = "app-breakpoint-fixer";
-
-class ImportJsonPage {
-  /** ページタイトル */
-  title: string;
-
-  /** ページタイトルを含む本文 */
-  lines: string[];
-
-  constructor(title: string) {
-    this.title = title;
-    this.lines = [title];
-  }
-}
-
-class ImportJson {
-  pages: ImportJsonPage[] = [];
-}
 
 async function main() {
   try {
@@ -46,15 +30,14 @@ async function main() {
     fixedAppCssRootNode.stylesheet.rules = fixedMediaRules;
     const fixedCssText = css.stringify(fixedAppCssRootNode);
 
-    // JSON形式
+    // Scrapbox でインポートする Json を作成
     const importJson = new ImportJson();
     const importPage = new ImportJsonPage(fixerCssName);
-    importPage.lines.push(`code:${fixerCssName}.css`);
-    fixedCssText.split("\n").forEach((v) => importPage.lines.push(" " + v));
+    importPage.lines.push(...makeCodeBlockLines(fixerCssName, fixedCssText));
     importJson.pages.push(importPage);
 
-    // fixerCssFileName を作成
-    await fs.writeFile(`${fixerCssName}.json`, JSON.stringify(importJson));
+    // Json ファイルを作成
+    await fs.writeFile(`${fixerCssName}.json`, importJson.stringify());
     SuccessConsoleLog(`${fixerCssName} created and text written successfully.`);
   } catch (error) {
     ErrorConsoleLog("catch error");
