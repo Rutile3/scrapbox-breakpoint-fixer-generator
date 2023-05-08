@@ -28,13 +28,13 @@ async function main() {
     const fixedCss = stringifyMediaRules(fixedMediaRules);
 
     // Scrapbox でインポートする JSON を作成
+    // ※CSS が長すぎてページにペーストができないので、
+    // 『Import Pages』から読み込むために JSON を作成している
     const importJson = new ImportJson();
     const importPage = new ImportJsonPage(scrapboxPageTitle);
     const codeBlock = ImportJsonPage.makeCodeBlockLines(cssFileName, fixedCss);
     importPage.lines.push(...codeBlock);
-    importPage.lines.push('');
-    importPage.lines.push('#Scrapbox #UserCSS #CSS');
-    importPage.lines.push('');
+    importPage.lines.push(...['', '#Scrapbox #UserCSS #CSS', '']);
     importJson.pages.push(importPage);
 
     // JSON ファイルを作成
