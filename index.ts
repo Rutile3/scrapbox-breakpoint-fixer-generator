@@ -1,44 +1,42 @@
-import css, { Media } from "css";
+import css from "css";
 import * as fs from "fs/promises";
 import prettier from "prettier";
 import { ErrorConsoleLog, SuccessConsoleLog } from "./consoleLog";
 import { downloadAppCssText } from "./downloadAppCss";
+import { ImportJson, ImportJsonPage } from "./importJsonIntoScrapbox";
 
-/**  */
+/** 定数 */
 const scrapboxPageTitle = "app-breakpoint-fixer";
-const fixerCssName = "app-breakpoint-fixer";
+const cssFileName = `${scrapboxPageTitle}.css`;
+const jsonFileName = `${scrapboxPageTitle}.json`;
 
 async function main() {
   try {
     // app.css をテキストで取得し、フォーマット
     // ※フォーマットしないと url("") の記述をパースできないので、フォーマットしている
-    const appCssText = await downloadAppCssText();
-    const formattedAppCssText = prettier.format(appCssText, { parser: "css" });
+    const appCss = await downloadAppCssText();
+    const formattedAppCss = prettier.format(appCss, { parser: "css" });
 
-    // app.cssのメディアクエリのみ取得
-    const appCssRootNode = css.parse(formattedAppCssText);
+    // app.css パースし、メディアクエリのみ取得
+    const appCssRootNode = css.parse(formattedAppCss);
     const mediaRules = extractMediaRules(appCssRootNode);
 
     // メディアクエリのブレイクポイントを置換
     const fixedMediaRules = replaceMediaRulesBreakpoint(mediaRules);
 
     // ブレイクポイントを修正した CSS をテキストで取得
-    const fixedAppCssRootNode = css.parse("");
-    if (fixedAppCssRootNode.stylesheet === undefined) {
-      throw new Error("fixedAppCssRootNode.stylesheet undefined");
-    }
-    fixedAppCssRootNode.stylesheet.rules = fixedMediaRules;
-    const fixedCssText = css.stringify(fixedAppCssRootNode);
+    const fixedCss = stringifyMediaRules(fixedMediaRules);
 
-    // Scrapbox でインポートする Json を作成
+    // Scrapbox でインポートする JSON を作成
     const importJson = new ImportJson();
-    const importPage = new ImportJsonPage(fixerCssName);
-    importPage.lines.push(...makeCodeBlockLines(fixerCssName, fixedCssText));
+    const importPage = new ImportJsonPage(scrapboxPageTitle);
+    const codeBlock = ImportJsonPage.makeCodeBlockLines(cssFileName, fixedCss);
+    importPage.lines.push(...codeBlock);
     importJson.pages.push(importPage);
 
-    // Json ファイルを作成
-    await fs.writeFile(`${fixerCssName}.json`, importJson.stringify());
-    SuccessConsoleLog(`${fixerCssName} created and text written successfully.`);
+    // JSON ファイルを作成
+    await fs.writeFile(jsonFileName, importJson.stringify());
+    SuccessConsoleLog(`${jsonFileName} created and text written successfully.`);
   } catch (error) {
     ErrorConsoleLog("catch error");
 
@@ -57,12 +55,12 @@ async function main() {
  * @param rootNode AST object
  * @returns メディアクエリの配列
  */
-function extractMediaRules(rootNode: css.Stylesheet): Media[] {
-  let mediaRules: Media[] = [];
+function extractMediaRules(rootNode: css.Stylesheet): css.Media[] {
+  let mediaRules: css.Media[] = [];
 
   rootNode.stylesheet?.rules.forEach((rule) => {
     if (rule.type === "media") {
-      mediaRules.push({ ...rule } as Media);
+      mediaRules.push({ ...rule } as css.Media);
     }
   });
 
@@ -91,6 +89,21 @@ function replaceMediaRulesBreakpoint(mediaRules: css.Media[]) {
   }
 
   return fixMediaRules;
+}
+
+/**
+ * メディアクエリの配列を JSON 文字列 に変換します。
+ * @param mediaRules メディアクエリの配列
+ * @returns JSON 文字列
+ */
+function stringifyMediaRules(mediaRules: css.Media[]): string {
+  const cssRootNode = css.parse("");
+  if (cssRootNode.stylesheet === undefined) {
+    throw new Error("cssRootNode.stylesheet is undefined");
+  }
+
+  cssRootNode.stylesheet.rules = mediaRules;
+  return css.stringify(cssRootNode);
 }
 
 main();

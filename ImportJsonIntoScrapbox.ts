@@ -1,11 +1,11 @@
-/** Scrapbox に取込む Json */
-class ImportJson {
+/** Scrapbox に取込む JSON */
+export class ImportJson {
   /** 取込むページ（複数） */
   public pages: ImportJsonPage[] = [];
 
   /**
-   * このオブジェクトを Json 文字列に変換します。
-   * @returns Json 文字列
+   * このオブジェクトを JSON 文字列に変換します。
+   * @returns JSON 文字列
    */
   public stringify(): string {
     return JSON.stringify(this);
@@ -13,7 +13,7 @@ class ImportJson {
 }
 
 /** Scrapbox に取込むページ */
-class ImportJsonPage {
+export class ImportJsonPage {
   /** ページタイトル */
   public title: string;
 
@@ -24,28 +24,28 @@ class ImportJsonPage {
     this.title = title;
     this.lines = [title];
   }
-}
 
-/**
- * ファイル名とソースコードからコードブロックを作成します。
- * @param fileName ファイル名
- * @param code ソースコード
- * @param indent インデント
- * @returns コードブロックのライン
- */
-function makeCodeBlockLines(
-  fileName: string,
-  code: string,
-  indent: number = 0
-) {
-  const lines: string[] = [];
-  const indentSpace = " ".repeat(indent);
+  /**
+   * ファイル名とソースコードからコードブロックを作成します。
+   * @param fileName ファイル名
+   * @param code ソースコード
+   * @param indent インデント
+   * @returns コードブロックのライン
+   */
+  public static makeCodeBlockLines(
+    fileName: string,
+    code: string,
+    indent: number = 0
+  ) {
+    const lines: string[] = [];
+    const indentSpace = " ".repeat(indent);
 
-  // インデントを考慮してコードブロックを作成
-  lines.push(indentSpace + `code:${fileName}`);
-  code.split("\n").forEach((line) => {
-    lines.push(indentSpace + " " + line);
-  });
+    // インデントを考慮してコードブロックを作成
+    lines.push(indentSpace + `code:${fileName}`);
+    code.split("\n").forEach((line) => {
+      lines.push(indentSpace + " " + line);
+    });
 
-  return lines;
+    return lines;
+  }
 }
