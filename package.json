@@ -10,10 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "css": "^3.0.0",
     "prettier": "^2.8.7",
     "typescript": "^5.0.4"
   },
   "devDependencies": {
-    "@types/node": "^18.16.1"
+    "@types/css": "^0.0.33",
+    "@types/node": "^18.16.1",
+    "@types/prettier": "^2.7.2"
   }
 }

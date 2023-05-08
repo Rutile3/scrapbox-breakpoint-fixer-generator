@@ -1,36 +1,113 @@
+import css, { Media } from "css";
 import * as fs from "fs/promises";
+import prettier from "prettier";
+import { ErrorConsoleLog, SuccessConsoleLog } from "./consoleLog";
 import { downloadAppCssText } from "./downloadAppCss";
 
-const fixerCssFileName = "app-breakpoint-fixer.css";
+/**  */
+const fixerCssName = "app-breakpoint-fixer";
+
+class ImportJsonPage {
+  /** ページタイトル */
+  title: string;
+
+  /** ページタイトルを含む本文 */
+  lines: string[];
+
+  constructor(title: string) {
+    this.title = title;
+    this.lines = [title];
+  }
+}
+
+class ImportJson {
+  pages: ImportJsonPage[] = [];
+}
 
 async function main() {
   try {
+    // app.css をテキストで取得し、フォーマット
+    // ※フォーマットしないと url("") の記述をパースできないので、フォーマットしている
     const appCssText = await downloadAppCssText();
-    
-    // TODO: app.cssからメディアクエリを抽出
-    // @media((and )*\((max|min)-width: \d{3,4}px\))* \{\n(.*\n)+?\}\n\n
+    const formattedAppCssText = prettier.format(appCssText, { parser: "css" });
 
-    // TODO: メディアクエリのmaxを置換
-    // max-width
-    // (max-width: 767px) -> (width < 768px)
-    // (max-width: 991px) -> (width < 992px)
-    // (max-width: 1199px) -> (width < 1200px)
-    const fixerCssText = appCssText;
+    // app.cssのメディアクエリのみ取得
+    const appCssRootNode = css.parse(formattedAppCssText);
+    const mediaRules = extractMediaRules(appCssRootNode);
 
-    // fixerCssFile を作成
-    await fs.writeFile(fixerCssFileName, fixerCssText);
-    console.log(`${fixerCssFileName} created and text written successfully.`);
+    // メディアクエリのブレイクポイントを置換
+    const fixedMediaRules = replaceMediaRulesBreakpoint(mediaRules);
+
+    // ブレイクポイントを修正した CSS をテキストで取得
+    const fixedAppCssRootNode = css.parse("");
+    if (fixedAppCssRootNode.stylesheet === undefined) {
+      throw new Error("fixedAppCssRootNode.stylesheet undefined");
+    }
+    fixedAppCssRootNode.stylesheet.rules = fixedMediaRules;
+    const fixedCssText = css.stringify(fixedAppCssRootNode);
+
+    // JSON形式
+    const importJson = new ImportJson();
+    const importPage = new ImportJsonPage(fixerCssName);
+    importPage.lines.push(`code:${fixerCssName}.css`);
+    fixedCssText.split("\n").forEach((v) => importPage.lines.push(" " + v));
+    importJson.pages.push(importPage);
+
+    // fixerCssFileName を作成
+    await fs.writeFile(`${fixerCssName}.json`, JSON.stringify(importJson));
+    SuccessConsoleLog(`${fixerCssName} created and text written successfully.`);
   } catch (error) {
-    console.log("catch error");
+    ErrorConsoleLog("catch error");
 
     if (error instanceof Error) {
-      console.log(error.message);
+      ErrorConsoleLog(error.message);
     } else if (typeof error === "string") {
-      console.log(error);
+      ErrorConsoleLog(error);
     } else {
-      console.log("unexpected error");
+      ErrorConsoleLog("unexpected error");
     }
   }
+}
+
+/**
+ * CSS の root node からメディアクエリのみ抽出します。
+ * @param rootNode AST object
+ * @returns メディアクエリの配列
+ */
+function extractMediaRules(rootNode: css.Stylesheet): Media[] {
+  let mediaRules: Media[] = [];
+
+  rootNode.stylesheet?.rules.forEach((rule) => {
+    if (rule.type === "media") {
+      mediaRules.push({ ...rule } as Media);
+    }
+  });
+
+  return mediaRules;
+}
+
+/**
+ * メディアクエリのブレイクポイントを置換します。
+ * @param mediaRules メディアクエリの配列
+ * @returns ブレイクポイントを置換したメディアクエリの配列
+ */
+function replaceMediaRulesBreakpoint(mediaRules: css.Media[]) {
+  const fixMediaRules = [...mediaRules];
+
+  for (const fixMediaRule of fixMediaRules) {
+    if (fixMediaRule.media !== undefined) {
+      fixMediaRule.media = fixMediaRule.media
+        .replace(/\(max-width:\s*767px\)/, "(width < 768px)")
+        .replace(/\(max-width:\s*991px\)/, "(width < 992px)")
+        .replace(/\(max-width:\s*1199px\)/, "(width < 1200px)")
+        .replace(/\(min-width:\s*768px\)/, "(768px <= width)")
+        .replace(/\(min-width:\s*992px\)/, "(992px <= width)")
+        .replace(/\(min-width:\s*1092px\)/, "(1092px <= width)")
+        .replace(/\(min-width:\s*1200px\)/, "(1200px <= width)");
+    }
+  }
+
+  return fixMediaRules;
 }
 
 main();
