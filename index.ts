@@ -32,6 +32,9 @@ async function main() {
     const importPage = new ImportJsonPage(scrapboxPageTitle);
     const codeBlock = ImportJsonPage.makeCodeBlockLines(cssFileName, fixedCss);
     importPage.lines.push(...codeBlock);
+    importPage.lines.push("");
+    importPage.lines.push("#Scrapbox #UserCSS");
+    importPage.lines.push("");
     importJson.pages.push(importPage);
 
     // JSON ファイルを作成
