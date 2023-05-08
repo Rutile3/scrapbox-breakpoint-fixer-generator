@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # This repository only
-app-breakpoint-fixer.css
+app-breakpoint-fixer.json
