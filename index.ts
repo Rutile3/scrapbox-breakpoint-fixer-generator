@@ -7,7 +7,7 @@ import { ImportJson, ImportJsonPage } from "./importJsonIntoScrapbox";
 
 /** 定数 */
 const scrapboxPageTitle = "app-breakpoint-fixer";
-const cssFileName = `${scrapboxPageTitle}.css`;
+const cssFileName = "style.css";
 const jsonFileName = `${scrapboxPageTitle}.json`;
 
 async function main() {
@@ -33,7 +33,7 @@ async function main() {
     const codeBlock = ImportJsonPage.makeCodeBlockLines(cssFileName, fixedCss);
     importPage.lines.push(...codeBlock);
     importPage.lines.push("");
-    importPage.lines.push("#Scrapbox #UserCSS");
+    importPage.lines.push("#Scrapbox #UserCSS #CSS");
     importPage.lines.push("");
     importJson.pages.push(importPage);
 
