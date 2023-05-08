@@ -1,13 +1,13 @@
 /** console.log() で出力する文字に色をつける制御文字 */
 class ConsoleColor {
   /** 赤色 */
-  static readonly RED = "\u001b[31m";
+  static readonly RED = '\u001b[31m';
 
   /** 緑色 */
-  static readonly GREEN = "\u001b[32m";
+  static readonly GREEN = '\u001b[32m';
 
   /** リセット */
-  static readonly RESET = "\u001b[0m";
+  static readonly RESET = '\u001b[0m';
 }
 
 /**
