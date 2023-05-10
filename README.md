@@ -1,5 +1,7 @@
 # README.md
 
+![UserCSSの適応前と適応後](img/before-after.png)
+
 ## 目次
 
 - [README.md](#readmemd)
@@ -25,7 +27,8 @@
 
 ## 開発構成の概要
 
-apiからapp.cssを取得し、メディアクエリのブレークポイントを修正したCSSをJSONで出力します。  
+APIからapp.cssを取得し、メディアクエリのブレークポイントを修正したCSSをJSONで出力します。
+出力したJSONをScrapboxに手動でインポートします。  
 
 ![開発構成の概要.drawio.png](img/開発構成の概要.drawio.png)
 
@@ -51,7 +54,7 @@ apiからapp.cssを取得し、メディアクエリのブレークポイント�
 
 ### パッケージをインストール
 
-ターミナルで`npm install`と実行すれば、package.jsonに記述されている依存パッケージをnode_modulesフォルダに自動でインストールする。
+ターミナルで`npm install`と実行すると、package.jsonに記述している依存パッケージをnode_modulesフォルダに自動でインストールできます。
 
 ### デバッグを実行
 
