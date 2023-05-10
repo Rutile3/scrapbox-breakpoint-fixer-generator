@@ -6,7 +6,7 @@ import { downloadAppCssText } from './downloadAppCss';
 import { ImportJson, ImportJsonPage } from './importJsonIntoScrapbox';
 
 /** 定数 */
-const scrapboxPageTitle = 'app-breakpoint-fixer';
+const scrapboxPageTitle = 'scrapbox-breakpoint-fixer';
 const cssFileName = 'style.css';
 const jsonFileName = `${scrapboxPageTitle}.json`;
 
