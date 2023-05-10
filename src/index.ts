@@ -8,7 +8,7 @@ import { ImportJson, ImportJsonPage } from './importJsonIntoScrapbox';
 /** 定数 */
 const scrapboxPageTitle = 'scrapbox-breakpoint-fixer';
 const cssFileName = 'style.css';
-const jsonFileName = `${scrapboxPageTitle}.json`;
+const jsonFileName = 'import-pages.json';
 
 async function main() {
   try {
