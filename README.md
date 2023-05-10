@@ -27,7 +27,7 @@
 
 apiからapp.cssを取得し、メディアクエリのブレークポイントを修正したCSSをJSONで出力します。  
 
-![開発構成の概要.drawio.png](doc/開発構成の概要.drawio.png)
+![開発構成の概要.drawio.png](img/開発構成の概要.drawio.png)
 
 ---
 
