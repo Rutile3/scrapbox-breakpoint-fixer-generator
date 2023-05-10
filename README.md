@@ -80,7 +80,7 @@ APIからapp.cssを取得し、メディアクエリのブレークポイント�
 > ├─package.json  
 > ├─README.md # この文書  
 > ├─scrapbox-breakpoint-fixer-generator.code-workspace # VSCode のワークスペース  
-> └─tsconfig.json // TypeScriptの設定  
+> └─tsconfig.json # TypeScriptの設定  
 
 ## プロジェクトを進める上での参考記事
 
