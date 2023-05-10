@@ -12,6 +12,7 @@
     - [VSCodeの環境を構築](#vscodeの環境を構築)
     - [パッケージをインストール](#パッケージをインストール)
     - [デバッグを実行](#デバッグを実行)
+  - [ディレクトリ構成](#ディレクトリ構成)
   - [プロジェクトを進める上での参考記事](#プロジェクトを進める上での参考記事)
 
 ---
@@ -46,14 +47,40 @@ apiからapp.cssを取得し、メディアクエリのブレークポイント�
 
 ### VSCodeの環境を構築
 
+- [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+
 ### パッケージをインストール
+
+ターミナルで`npm install`と実行すれば、package.jsonに記述されている依存パッケージをnode_modulesフォルダに自動でインストールする。
 
 ### デバッグを実行
 
 ---
 
+## ディレクトリ構成
+
+> scrapbox-breakpoint-fixer-generator/  
+> ├─.vscode/  
+> │  ├─launch.json # 実行用の設定  
+> │  └─tasks.json # ビルド(コンパイル)用の設定  
+> ├─doc/  
+> │  └─コーディング規約_TypeScript.md  
+> ├─node_modules/ # 依存パッケージ  
+> ├─out/ # コンパイル後の実行ファイルと map ファイル  
+> ├─src/  
+> │  ├─consoleLog.ts # ログ出力のラッパー  
+> │  ├─downloadAppCss.ts # Scrapbox から app.css をダウンロード  
+> │  ├─importJsonIntoScrapbox.ts # Scrapbox にインポートする JSON  
+> │  └─index.ts # ビルドのエントリーポイント（メイン処理）  
+> ├─.gitignore  
+> ├─package-lock.json  
+> ├─package.json  
+> ├─README.md # この文書  
+> ├─scrapbox-breakpoint-fixer-generator.code-workspace # VSCode のワークスペース  
+> └─tsconfig.json // TypeScriptの設定  
+
 ## プロジェクトを進める上での参考記事
 
 - [VSCodeでよく作るTypeScriptの学習環境](https://blog.mamansoft.net/2020/10/14/vscode-typescript-learning/)
 - [特定のウィンドウサイズで検索欄の見た目が崩れる](https://scrapbox.io/forum-jp/特定のウィンドウサイズで検索欄の見た目が崩れる)
-- [app-breakpoint-fixer](https://scrapbox.io/Rutile3Tech/app-breakpoint-fixer)
+- [scrapbox-breakpoint-fixer](https://scrapbox.io/Rutile3Tech/scrapbox-breakpoint-fixer)
