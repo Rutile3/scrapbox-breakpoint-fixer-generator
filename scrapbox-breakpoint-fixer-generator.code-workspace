@@ -6,6 +6,7 @@
   ],
   "settings": {
     "editor.tabSize": 2,
+    "markdown.extension.toc.updateOnSave": true, // 目次の自動更新を有効
     "prettier.singleQuote": true,
     "[javascript]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
