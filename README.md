@@ -28,10 +28,10 @@
 これを解決するために、このプログラムでapp.cssからメディアクエリを抽出し、メディアクエリのブレイクポイントを修正したCSSをImport Pagesで取込めるJSON形式で出力する。
 Import Pageで取込んだCSSをUserCSSとして読み込むと、冒頭の画像のように検索欄の見た目が崩れなくなる。
 
-![修正前のブレイクポイント](img/before-breakpoint.png)
+![修正前のブレイクポイント](img/before-breakpoint.png)  
 図1： 修正前のブレークポイント
 
-![修正後のブレイクポイント](img/after-breakpoint.png)
+![修正後のブレイクポイント](img/after-breakpoint.png)  
 図2： 修正後のブレークポイント
 
 --------------------------------------------------
