@@ -32,6 +32,8 @@ async function main() {
     const importJson = new ImportJson();
     const importPage = new ImportJsonPage(scrapboxPageTitle);
     const codeBlock = ImportJsonPage.makeCodeBlockLines(cssFileName, fixedCss);
+    importPage.lines.push('解説記事：[【Scrapbox】ウィンドウサイズの横幅が767pxの時に、見た目が崩れるのを防ぐ【UserCSS】]');
+    importPage.lines.push('');
     importPage.lines.push('Created date:' + new Date().toLocaleDateString());
     importPage.lines.push(...codeBlock);
     importPage.lines.push(...['', '#Scrapbox #UserCSS #CSS', '']);
