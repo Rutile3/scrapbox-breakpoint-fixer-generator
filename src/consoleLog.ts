@@ -15,7 +15,7 @@ class ConsoleColor {
  * @param message エラーメッセージ
  */
 export function ErrorConsoleLog(message: string): void {
-  console.log(ConsoleColor.RED + message + ConsoleColor.RESET);
+  console.error(ConsoleColor.RED + message + ConsoleColor.RESET);
 }
 
 /**
@@ -23,5 +23,5 @@ export function ErrorConsoleLog(message: string): void {
  * @param message メッセージ
  */
 export function SuccessConsoleLog(message: string): void {
-  console.log(ConsoleColor.GREEN + message + ConsoleColor.RESET);
+  console.info(ConsoleColor.GREEN + message + ConsoleColor.RESET);
 }
