@@ -1,7 +1,7 @@
 import css from 'css';
 import * as fs from 'fs/promises';
 import prettier from 'prettier';
-import { ErrorConsoleLog, SuccessConsoleLog } from './consoleLog';
+import { ErrorConsoleLog, ErrorConsoleLogTrace, SuccessConsoleLog } from './consoleLog';
 import { downloadAppCssText } from './downloadAppCss';
 import { ImportJson, ImportJsonPage } from './importJsonIntoScrapbox';
 
@@ -46,7 +46,7 @@ async function main() {
     ErrorConsoleLog('catch error');
 
     if (error instanceof Error) {
-      ErrorConsoleLog(error.message);
+      ErrorConsoleLogTrace(error);
     } else if (typeof error === 'string') {
       ErrorConsoleLog(error);
     } else {
