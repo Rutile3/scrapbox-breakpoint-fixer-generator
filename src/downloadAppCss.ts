@@ -13,7 +13,13 @@ export async function downloadAppCssText(): Promise<string> {
       .get(appCssUrl, (res) => {
         let data = '';
         res.on('data', (chunk) => (data += chunk));
-        res.on('end', () => resolve(data));
+        res.on('end', () => {
+          // BOM (U+feff) を取り除く
+          if (data.charCodeAt(0) === 0xfeff) {
+            data = data.slice(1);
+          }
+          resolve(data);
+        });
       })
       .on('error', (err) => reject(err));
   });
