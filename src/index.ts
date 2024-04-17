@@ -1,6 +1,7 @@
-import css from 'css';
+import { CssMediaAST, CssStylesheetAST, parse, stringify } from '@adobe/css-tools'
 import * as fs from 'fs/promises';
 import prettier from 'prettier';
+
 import { ErrorConsoleLog, ErrorConsoleLogTrace, SuccessConsoleLog } from './consoleLog';
 import { downloadAppCssText } from './downloadAppCss';
 import { ImportJson, ImportJsonPage } from './importJsonIntoScrapbox';
@@ -18,7 +19,7 @@ async function main() {
     const formattedAppCss = prettier.format(appCss, { parser: 'css' });
 
     // app.css パースし、メディアクエリのみ取得
-    const appCssRootNode = css.parse(formattedAppCss);
+    const appCssRootNode = parse(formattedAppCss);
     const mediaRules = extractMediaRules(appCssRootNode);
 
     // メディアクエリのブレイクポイントを置換
@@ -60,12 +61,12 @@ async function main() {
  * @param rootNode AST object
  * @returns メディアクエリの配列
  */
-function extractMediaRules(rootNode: css.Stylesheet): css.Media[] {
-  let mediaRules: css.Media[] = [];
+function extractMediaRules(rootNode: CssStylesheetAST): CssMediaAST[] {
+  let mediaRules: CssMediaAST[] = [];
 
   rootNode.stylesheet?.rules.forEach((rule) => {
     if (rule.type === 'media') {
-      mediaRules.push({ ...rule } as css.Media);
+      mediaRules.push({ ...rule } as CssMediaAST);
     }
   });
 
@@ -77,7 +78,7 @@ function extractMediaRules(rootNode: css.Stylesheet): css.Media[] {
  * @param mediaRules メディアクエリの配列
  * @returns ブレイクポイントを置換したメディアクエリの配列
  */
-function replaceMediaRulesBreakpoint(mediaRules: css.Media[]) {
+function replaceMediaRulesBreakpoint(mediaRules: CssMediaAST[]) {
   const fixMediaRules = [...mediaRules];
 
   for (const fixMediaRule of fixMediaRules) {
@@ -101,14 +102,14 @@ function replaceMediaRulesBreakpoint(mediaRules: css.Media[]) {
  * @param mediaRules メディアクエリの配列
  * @returns JSON 文字列
  */
-function stringifyMediaRules(mediaRules: css.Media[]): string {
-  const cssRootNode = css.parse('');
+function stringifyMediaRules(mediaRules: CssMediaAST[]): string {
+  const cssRootNode = parse('');
   if (cssRootNode.stylesheet === undefined) {
     throw new Error('cssRootNode.stylesheet is undefined');
   }
 
   cssRootNode.stylesheet.rules = mediaRules;
-  return css.stringify(cssRootNode);
+  return stringify(cssRootNode);
 }
 
 main();
